@@ -1,741 +1,727 @@
+I've completely reimagined the website as a soft, story-rich love letter that feels like you — with your milestones, your memories, and your favorite details woven into every corner. It now has a side panel that reveals your love notes when you click the memory jar, tulip fields, a countdown in months, and a space where you can write him something directly from the heart.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>our treasure map · for the one i love</title>
-    <!-- Google Fonts: a romantic mix of handwritten & elegant serif -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@400;600&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>our forever map · for my favorite person</title>
+  <!-- fonts: elegant handwritten & serif -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Dancing+Script:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        :root {
-            --cream: #fdf7f0;
-            --parchment: #e8d7b5;
-            --parchment-dark: #cfbb9b;
-            --ink: #4a3c31;
-            --ink-soft: #6b5b4f;
-            --dusty-rose: #c9a0a0;
-            --rose-glow: #f0dad5;
-            --sage: #b5c2a7;
-            --gold: #baa07e;
-            --paper-light: #fef9f0;
-            --shadow-soft: 0 12px 30px rgba(74, 60, 49, 0.15);
-            --tulip-pink: #f2c4c4;
-            --tulip-leaf: #a3b89b;
-        }
+    :root {
+      --bg: #faf5ef;
+      --parchment: #eedcc8;
+      --parchment-light: #f7efe2;
+      --parchment-dark: #d4b896;
+      --ink: #3e362e;
+      --ink-soft: #6b5d50;
+      --dusty-rose: #cb9a9a;
+      --blush: #f2d5d5;
+      --tulip-pink: #f7c5c0;
+      --tulip-leaf: #a3b89b;
+      --gold: #c4a97d;
+      --shadow: 0 20px 40px rgba(60, 45, 30, 0.15);
+      --border-soft: 1px solid #dcc6aa;
+    }
 
-        body {
-            background: var(--cream);
-            font-family: 'Quicksand', sans-serif;
-            color: var(--ink);
-            overflow-x: hidden;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d5c1a5' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            scroll-behavior: smooth;
-        }
+    body {
+      background: var(--bg);
+      font-family: 'Quicksand', sans-serif;
+      color: var(--ink);
+      overflow-x: hidden;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d9c2a0' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      scroll-behavior: smooth;
+    }
 
-        /* main wrapper */
-        .love-scroll {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
-            position: relative;
-        }
+    .love-scroll {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.8rem 4rem;
+      position: relative;
+    }
 
-        /* floating petals & tulip petals animation */
-        @keyframes floatPetals {
-            0% {
-                transform: translateY(105vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.5;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        .petal {
-            position: fixed;
-            width: 15px;
-            height: 15px;
-            background: var(--dusty-rose);
-            border-radius: 50% 0 50% 0;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 0;
-            animation: floatPetals 12s linear infinite;
-            filter: blur(0.5px);
-        }
-        .petal:nth-child(odd) {
-            background: var(--rose-glow);
-            width: 10px;
-            height: 10px;
-            animation-duration: 16s;
-        }
-        /* tulip petal style: a bit rounder */
-        .petal.tulip-petal {
-            background: var(--tulip-pink);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            width: 18px;
-            height: 22px;
-            animation-duration: 14s;
-        }
+    /* floating petals with tulip shapes */
+    @keyframes floatUp {
+      0% { transform: translateY(105vh) rotate(0deg); opacity: 0; }
+      15% { opacity: 0.7; }
+      85% { opacity: 0.6; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+    .petal {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatUp 12s linear infinite;
+    }
+    .petal.rose {
+      background: var(--dusty-rose);
+      width: 14px; height: 14px;
+      border-radius: 50% 0 50% 0;
+    }
+    .petal.tulip {
+      background: var(--tulip-pink);
+      width: 20px; height: 24px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      animation-duration: 15s;
+    }
 
-        /* parchment texture & torn edge */
-        .treasure-map {
-            background: var(--parchment);
-            background-image: radial-gradient(circle at 20% 30%, rgba(255,245,235,0.5) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(210,180,140,0.3) 0%, transparent 50%),
-                url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-            padding: 3rem 2rem 2rem;
-            margin: 2rem 0 3rem;
-            position: relative;
-            clip-path: polygon(3% 0%, 18% 2%, 32% 0%, 47% 3%, 63% 1%, 78% 2%, 93% 0%, 98% 4%, 100% 17%, 97% 32%, 100% 47%, 98% 63%, 100% 78%, 97% 93%, 92% 100%, 78% 97%, 63% 100%, 48% 97%, 33% 100%, 18% 97%, 4% 100%, 1% 93%, 0% 78%, 2% 63%, 0% 47%, 3% 32%, 0% 17%, 1% 4%);
-            box-shadow: 0 25px 45px rgba(74, 60, 49, 0.25), inset 0 0 35px rgba(180, 145, 110, 0.4);
-            border: 1px solid #b89b7b;
-            transform: rotate(-0.3deg);
-            transition: transform 0.3s ease;
-        }
-        .treasure-map:hover {
-            transform: rotate(0deg) scale(1.01);
-        }
+    /* parchment treasure map */
+    .treasure-map {
+      background: var(--parchment);
+      background-image: radial-gradient(circle at 25% 30%, rgba(255,248,240,0.6) 0%, transparent 45%),
+                        radial-gradient(circle at 75% 70%, rgba(200,170,130,0.3) 0%, transparent 50%),
+                        url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+      padding: 3rem 2.2rem;
+      margin: 2rem 0 4rem;
+      clip-path: polygon(4% 0%, 16% 1.5%, 30% 0.5%, 44% 2%, 58% 0.8%, 72% 1.8%, 88% 0.3%, 97% 3%, 100% 16%, 97.5% 32%, 100% 48%, 97% 64%, 100% 78%, 96% 92%, 89% 100%, 74% 97%, 58% 100%, 42% 97.5%, 26% 100%, 11% 97%, 3% 100%, 1% 92%, 0% 78%, 2.5% 63%, 0% 47%, 3% 32%, 0% 16%, 2% 3%);
+      box-shadow: 0 30px 50px rgba(60, 40, 25, 0.25), inset 0 0 45px rgba(180, 140, 100, 0.5);
+      border: 1px solid #b4946e;
+      transform: rotate(-0.2deg);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+    .treasure-map:hover { transform: rotate(0deg) scale(1.01); }
 
-        .map-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3.2rem;
-            color: var(--ink);
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            text-shadow: 2px 2px 0 rgba(255, 250, 245, 0.8);
-            letter-spacing: 2px;
-            position: relative;
-        }
-        .map-title::after {
-            content: "✧";
-            font-size: 2.5rem;
-            color: var(--gold);
-            margin-left: 10px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 0.5; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0.5; transform: scale(0.9); }
-        }
+    .map-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 3.5rem;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      text-shadow: 2px 2px 0 rgba(255, 245, 235, 0.7);
+      letter-spacing: 2px;
+    }
+    .map-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      text-align: center;
+      font-size: 1.3rem;
+      color: var(--ink-soft);
+      margin-bottom: 2rem;
+    }
+    .map-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      justify-items: center;
+      align-items: start;
+      margin: 2rem 0;
+    }
+    .milestone {
+      position: relative;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.3s;
+    }
+    .milestone:hover { transform: translateY(-6px); }
+    .x-mark {
+      font-size: 2.8rem;
+      color: #b34e4a;
+      text-shadow: 2px 2px 0 #5e322e;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: bold;
+      display: inline-block;
+      transition: 0.2s;
+      transform: rotate(4deg);
+    }
+    .milestone:hover .x-mark { transform: rotate(0deg) scale(1.25); color: #d97c74; }
+    .milestone-date {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      margin-top: 0.2rem;
+    }
+    .milestone-desc {
+      background: #fffbf2;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.06);
+      margin-top: 0.3rem;
+      display: none;
+      position: absolute;
+      bottom: 115%;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      border: 1px dashed var(--parchment-dark);
+      z-index: 12;
+      font-weight: 500;
+    }
+    .milestone:hover .milestone-desc { display: block; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translate(-50%, 12px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
 
-        /* tulip decoration fixed on map */
-        .tulip-corner {
-            position: absolute;
-            bottom: -5px;
-            right: 20px;
-            font-size: 2.2rem;
-            opacity: 0.7;
-            pointer-events: none;
-            display: flex;
-            gap: 5px;
-        }
-        .tulip-corner span {
-            display: inline-block;
-            animation: sway 3s infinite alternate;
-        }
-        @keyframes sway {
-            0% { transform: rotate(-3deg); }
-            100% { transform: rotate(3deg); }
-        }
+    .compass {
+      text-align: center;
+      margin: 0.5rem 0 0;
+      font-size: 1.1rem;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+    .tulip-map-decor {
+      position: absolute;
+      bottom: 8px;
+      right: 25px;
+      font-size: 2rem;
+      opacity: 0.7;
+      display: flex;
+      gap: 4px;
+    }
 
-        .map-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1.8rem;
-            justify-items: center;
-            align-items: start;
-            margin: 2rem 0;
-        }
+    /* counters */
+    .counters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin: 2.5rem 0 3rem;
+    }
+    .counter-box {
+      background: rgba(255, 250, 244, 0.8);
+      backdrop-filter: blur(5px);
+      border: 1px solid var(--parchment-dark);
+      padding: 1.4rem 2.2rem;
+      border-radius: 30px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      min-width: 200px;
+    }
+    .counter-label {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.7rem;
+      color: var(--ink);
+    }
+    .counter-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: #6b4e3a;
+      margin: 0.2rem 0;
+    }
 
-        .milestone {
-            position: relative;
-            cursor: pointer;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        .milestone:hover {
-            transform: translateY(-5px);
-        }
-        .x-mark {
-            font-size: 2.6rem;
-            color: #b4473c;
-            text-shadow: 2px 2px 0 #5c2e2a;
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: bold;
-            display: inline-block;
-            transition: 0.2s;
-            transform: rotate(5deg);
-        }
-        .milestone:hover .x-mark {
-            transform: rotate(0deg) scale(1.3);
-            color: #d96c60;
-        }
-        .milestone-date {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.1rem;
-            color: var(--ink-soft);
-            margin-top: 0.2rem;
-        }
-        .milestone-desc {
-            background: var(--paper-light);
-            padding: 0.5rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
-            margin-top: 0.3rem;
-            font-weight: 500;
-            display: none;
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-            background: #fffbf2;
-            border: 1px dashed var(--parchment-dark);
-            z-index: 10;
-        }
-        .milestone:hover .milestone-desc {
-            display: block;
-            animation: fadeUp 0.3s ease;
-        }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translate(-50%, 10px); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
+    /* fancy memory jar with side panel */
+    .jar-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: flex-start;
+      margin: 4rem 0 2rem;
+    }
+    .jar-section {
+      flex: 1 1 400px;
+      background: #f9f2e7;
+      border-radius: 80px;
+      padding: 2.5rem 2rem;
+      box-shadow: inset 0 0 30px rgba(180,140,110,0.15);
+      position: relative;
+    }
+    .jar-visual {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .glass-jar {
+      background: rgba(255, 252, 247, 0.55);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,250,240,0.9);
+      border-radius: 50px 50px 35px 35px;
+      padding: 1.5rem;
+      box-shadow: 0 18px 35px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 300px;
+    }
+    .jar-lid {
+      width: 90px;
+      height: 18px;
+      background: #b2967c;
+      margin: 0 auto -8px;
+      border-radius: 20px 20px 0 0;
+    }
+    .notes-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      justify-content: center;
+    }
+    .note {
+      background: #f9efda;
+      padding: 0.5rem;
+      width: 55px;
+      height: 65px;
+      background: #faf0d7;
+      border: 1px solid #dac29c;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+      cursor: pointer;
+      font-size: 0.65rem;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: 0.25s;
+      border-radius: 4px;
+      transform: rotate(-2deg);
+      writing-mode: vertical-rl;
+      font-family: 'Dancing Script', cursive;
+      font-weight: bold;
+    }
+    .note:hover {
+      transform: rotate(0deg) scale(1.2);
+      background: #fff5e6;
+      z-index: 5;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .side-panel {
+      flex: 1 1 300px;
+      background: #fffcf5;
+      border-radius: 40px;
+      padding: 2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      border: 1px solid var(--parchment-dark);
+      max-height: 450px;
+      overflow-y: auto;
+      font-family: 'Cormorant Garamond', serif;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .side-panel h3 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2rem;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .side-panel p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      font-style: italic;
+    }
+    .empty-message {
+      color: #b7a797;
+      font-style: italic;
+      text-align: center;
+      margin-top: 2rem;
+    }
 
-        .compass {
-            text-align: center;
-            margin: 1rem 0 0;
-            font-size: 1.2rem;
-            color: var(--ink-soft);
-            font-style: italic;
-        }
+    /* love note writing area */
+    .write-note-area {
+      background: #fdf8f2;
+      border-radius: 45px;
+      padding: 2rem;
+      margin: 3rem 0;
+      border: 1px dashed var(--gold);
+    }
+    .write-note-area h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.3rem;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .note-input {
+      width: 100%;
+      min-height: 120px;
+      background: #fffef9;
+      border: 1px solid var(--parchment-dark);
+      border-radius: 25px;
+      padding: 1.2rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--ink);
+      resize: vertical;
+      outline: none;
+    }
+    .save-note-btn {
+      background: var(--dusty-rose);
+      border: none;
+      color: white;
+      padding: 0.7rem 2rem;
+      border-radius: 30px;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.3rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+      display: block;
+      margin-left: auto;
+    }
+    .save-note-btn:hover { background: #b87c7c; }
 
-        /* counters */
-        .counters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2.5rem;
-            justify-content: center;
-            margin: 3rem 0 2rem;
-        }
-        .counter-box {
-            background: rgba(255, 248, 240, 0.85);
-            backdrop-filter: blur(6px);
-            border: 2px solid var(--parchment-dark);
-            padding: 1.5rem 2rem;
-            border-radius: 30px;
-            text-align: center;
-            box-shadow: var(--shadow-soft);
-            min-width: 180px;
-        }
-        .counter-label {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.8rem;
-            color: var(--ink);
-        }
-        .counter-number {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.8rem;
-            font-weight: 600;
-            color: #6e4e3f;
-            margin: 0.3rem 0;
-        }
+    /* spotify & polaroids */
+    .spotify-frame {
+      margin: 2.5rem auto;
+      background: #f3eada;
+      border-radius: 40px;
+      padding: 1rem;
+      box-shadow: 0 12px 25px rgba(0,0,0,0.06);
+      border: 1px solid #d4bca3;
+      max-width: 450px;
+    }
+    .spotify-frame iframe {
+      border-radius: 20px;
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
 
-        /* gallery */
-        .gallery-section {
-            margin: 4rem 0 2rem;
-            text-align: center;
-        }
-        .section-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
-            color: var(--ink);
-            margin-bottom: 2rem;
-            display: inline-block;
-            border-bottom: 2px dotted var(--gold);
-            padding-bottom: 0.3rem;
-        }
-        .polaroid-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-        }
-        .polaroid {
-            background: #fffef7;
-            padding: 0.7rem 0.7rem 2.5rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-radius: 4px;
-            width: 180px;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
-            transform: rotate(-2deg);
-            position: relative;
-        }
-        .polaroid:nth-child(even) {
-            transform: rotate(2deg);
-        }
-        .polaroid:hover {
-            transform: rotate(0deg) scale(1.07);
-            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
-            z-index: 2;
-        }
-        .polaroid img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            background: #f5e6d3;
-            display: block;
-            border-radius: 2px;
-        }
-        .polaroid .caption {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1rem;
-            margin-top: 0.4rem;
-            color: var(--ink-soft);
-        }
+    .polaroid-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+    .polaroid {
+      background: #fffdf7;
+      padding: 0.6rem 0.6rem 2.2rem;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.1);
+      border-radius: 3px;
+      width: 170px;
+      transition: 0.35s;
+      transform: rotate(-1.5deg);
+    }
+    .polaroid:nth-child(even) { transform: rotate(2deg); }
+    .polaroid:hover { transform: rotate(0) scale(1.05); z-index: 2; }
+    .polaroid img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      background: #f3e6d2;
+      border-radius: 2px;
+    }
 
-        /* memory jar */
-        .jar-section {
-            background: #f7efe2;
-            border-radius: 80px;
-            padding: 3rem 2rem;
-            margin: 4rem 0;
-            position: relative;
-            box-shadow: inset 0 0 30px rgba(180, 150, 120, 0.2);
-        }
-        .jar-visual {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        .glass-jar {
-            background: rgba(255, 255, 250, 0.5);
-            backdrop-filter: blur(12px);
-            border: 2px solid rgba(255,255,240,0.9);
-            border-radius: 50px 50px 30px 30px;
-            padding: 1.8rem;
-            position: relative;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
-            min-width: 220px;
-        }
-        .jar-lid {
-            width: 100px;
-            height: 20px;
-            background: #ac8e7a;
-            margin: 0 auto -10px;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -3px 8px rgba(0,0,0,0.1);
-        }
-        .notes-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            justify-content: center;
-            max-width: 250px;
-        }
-        .note {
-            background: #fef3d4;
-            padding: 0.6rem;
-            width: 60px;
-            height: 70px;
-            background: #faf0d7;
-            border: 1px solid #d9c7a3;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.08);
-            cursor: pointer;
-            font-size: 0.7rem;
-            color: var(--ink);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            transition: 0.2s;
-            border-radius: 3px;
-            transform: rotate(-3deg);
-            writing-mode: vertical-rl;
-            font-family: 'Dancing Script', cursive;
-            font-weight: bold;
-        }
-        .note:hover {
-            transform: rotate(0deg) scale(1.15);
-            background: #fff6e5;
-            z-index: 5;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .jar-message {
-            font-family: 'Cormorant Garamond', serif;
-            font-style: italic;
-            max-width: 280px;
-            color: var(--ink);
-            font-size: 1.3rem;
-            line-height: 1.5;
-        }
+    .secret-btn {
+      background: var(--blush);
+      border: none;
+      color: #4a3c31;
+      padding: 0.8rem 2rem;
+      border-radius: 40px;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(180,130,130,0.3);
+      display: block;
+      margin: 2rem auto;
+    }
 
-        /* spotify */
-        .spotify-frame {
-            margin: 3rem auto;
-            background: #f3eada;
-            border-radius: 40px;
-            padding: 1.2rem;
-            box-shadow: 0 18px 30px rgba(0,0,0,0.08);
-            border: 1px solid #d4bca3;
-            max-width: 500px;
-        }
-        .spotify-frame iframe {
-            border-radius: 25px;
-            width: 100%;
-            height: 352px;
-            border: none;
-        }
+    .footer-note {
+      text-align: center;
+      margin-top: 4rem;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.14rem;
+      color: #b2997a;
+    }
 
-        /* secret letter */
-        .secret-btn {
-            background: var(--dusty-rose);
-            border: none;
-            color: #fff;
-            padding: 0.9rem 2.2rem;
-            border-radius: 40px;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.4rem;
-            cursor: pointer;
-            box-shadow: 0 8px 18px rgba(180, 130, 130, 0.4);
-            transition: 0.3s;
-            display: block;
-            margin: 2.5rem auto 1rem;
-        }
-        .secret-btn:hover {
-            background: #b58383;
-            box-shadow: 0 12px 24px rgba(160, 110, 110, 0.5);
-            transform: translateY(-2px);
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(6px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
-        .love-letter {
-            background: #fef7e9;
-            max-width: 500px;
-            padding: 2.5rem;
-            border-radius: 25px;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
-            font-family: 'Cormorant Garamond', serif;
-            position: relative;
-            text-align: center;
-            border: 2px solid #e6cfb3;
-        }
-        .love-letter h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.8rem;
-            margin-bottom: 1rem;
-        }
-        .close-letter {
-            position: absolute;
-            top: 15px; right: 20px;
-            font-size: 2rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--ink);
-        }
-
-        /* tulip patch extra section */
-        .tulip-patch {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            font-size: 2rem;
-        }
-        .tulip-patch span {
-            transition: transform 0.3s;
-            cursor: default;
-        }
-        .tulip-patch span:hover {
-            transform: scale(1.3) rotate(10deg);
-        }
-        .tulip-message {
-            text-align: center;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.5rem;
-            color: var(--ink-soft);
-            margin: 1rem 0;
-        }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 4rem;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.2rem;
-            color: #b2997a;
-        }
-
-        @media (max-width: 600px) {
-            .map-title { font-size: 2.2rem; }
-            .treasure-map { padding: 2rem 1rem; }
-        }
-    </style>
+    /* modal */
+    .modal {
+      position: fixed;
+      top:0;left:0;width:100%;height:100%;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(7px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    .letter-card {
+      background: #fef7e9;
+      max-width: 480px;
+      padding: 2.5rem;
+      border-radius: 30px;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+      font-family: 'Cormorant Garamond', serif;
+      position: relative;
+      border: 2px solid #decbb0;
+    }
+    .close-btn {
+      position: absolute;
+      top:12px; right:18px;
+      font-size: 2rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <!-- floating petals: some tulip-shaped -->
-    <div class="petal" style="left: 5%; animation-delay: 0s;"></div>
-    <div class="petal tulip-petal" style="left: 12%; animation-delay: 1.2s;"></div>
-    <div class="petal" style="left: 25%; animation-delay: 4s;"></div>
-    <div class="petal tulip-petal" style="left: 38%; animation-delay: 2.5s;"></div>
-    <div class="petal" style="left: 45%; animation-delay: 3s;"></div>
-    <div class="petal tulip-petal" style="left: 55%; animation-delay: 0.8s;"></div>
-    <div class="petal" style="left: 65%; animation-delay: 2s;"></div>
-    <div class="petal tulip-petal" style="left: 72%; animation-delay: 3.8s;"></div>
-    <div class="petal" style="left: 85%; animation-delay: 1.5s;"></div>
-    <div class="petal tulip-petal" style="left: 92%; animation-delay: 4.2s;"></div>
+  <!-- floating petals (tulip & rose) -->
+  <div class="petal rose" style="left:4%; animation-delay:0s;"></div>
+  <div class="petal tulip" style="left:10%; animation-delay:1s;"></div>
+  <div class="petal rose" style="left:20%; animation-delay:2.5s;"></div>
+  <div class="petal tulip" style="left:30%; animation-delay:3.8s;"></div>
+  <div class="petal rose" style="left:42%; animation-delay:0.5s;"></div>
+  <div class="petal tulip" style="left:55%; animation-delay:1.8s;"></div>
+  <div class="petal rose" style="left:67%; animation-delay:3s;"></div>
+  <div class="petal tulip" style="left:78%; animation-delay:4.2s;"></div>
+  <div class="petal rose" style="left:88%; animation-delay:1.2s;"></div>
+  <div class="petal tulip" style="left:94%; animation-delay:2.8s;"></div>
 
-    <div class="love-scroll">
-        <!-- Treasure Map -->
-        <div class="treasure-map" id="map">
-            <h1 class="map-title">Our Adventure Map</h1>
-            <div class="map-grid" id="milestoneGrid"></div>
-            <div class="compass">❧ follow the X's to where our hearts first met ❧</div>
-            <div class="tulip-corner">
-                <span>🌷</span><span>🌷</span>
-            </div>
-        </div>
-
-        <!-- Counters -->
-        <div class="counters">
-            <div class="counter-box">
-                <div class="counter-label">days since we started</div>
-                <div class="counter-number" id="daysTogether">—</div>
-                <div style="font-size:0.9rem; color:var(--ink-soft);">and every second is a tulip bloom</div>
-            </div>
-            <div class="counter-box">
-                <div class="counter-label">until we finally meet</div>
-                <div class="counter-number" id="daysUntilMeet">—</div>
-                <div style="font-size:0.9rem; color:var(--ink-soft);">the garden awaits</div>
-            </div>
-        </div>
-
-        <!-- Tulip Patch interactive -->
-        <div class="tulip-patch" id="tulipField">
-            <span>🌷</span><span>🌷</span><span>🌷</span><span>🌷</span><span>🌷</span>
-        </div>
-        <div class="tulip-message" id="tulipMessage">he loves tulips, so I planted a field for him</div>
-
-        <!-- Photo Gallery -->
-        <div class="gallery-section">
-            <h2 class="section-title">· our little moments ·</h2>
-            <div class="polaroid-grid" id="photoGrid"></div>
-        </div>
-
-        <!-- Memory Jar -->
-        <div class="jar-section">
-            <div style="text-align:center; margin-bottom:1rem;">
-                <span class="section-title">· memory jar ·</span>
-            </div>
-            <div class="jar-visual">
-                <div class="glass-jar">
-                    <div class="jar-lid"></div>
-                    <div class="notes-stack" id="jarNotes"></div>
-                </div>
-                <div class="jar-message" id="jarDisplayMessage">
-                    ✦ click a note to unfold a little reason ✦
-                </div>
-            </div>
-        </div>
-
-        <!-- Spotify -->
-        <div class="spotify-frame">
-            <iframe src="https://open.spotify.com/embed/playlist/6GsmvGHhNr7EU3wtdKjSR7?utm_source=generator" 
-                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-                    loading="lazy"></iframe>
-        </div>
-
-        <!-- Secret letter -->
-        <button class="secret-btn" id="openLetterBtn">✧ a letter from my heart ✧</button>
-
-        <div class="footer-note">
-            made with every ounce of love, croissant crumbs, minecraft dreams & tulip petals<br>
-            you're my kind of wonderful.
-        </div>
+  <div class="love-scroll">
+    <!-- Treasure Map -->
+    <div class="treasure-map" id="map">
+      <h1 class="map-title">✨ Our Love Map ✨</h1>
+      <div class="map-subtitle">every X marks a moment that made my heart yours</div>
+      <div class="map-grid" id="milestoneGrid"></div>
+      <div class="compass">❦ wherever we go, my heart points to you ❦</div>
+      <div class="tulip-map-decor">🌷🌷</div>
     </div>
 
-    <!-- Love Letter Modal -->
-    <div class="modal-overlay" id="letterModal">
-        <div class="love-letter">
-            <button class="close-letter" id="closeLetter">&times;</button>
-            <h2>my dearest love,</h2>
-            <p style="font-size:1.3rem; line-height:1.6; margin:1.2rem 0;">
-                i still remember the first time you made me laugh until my stomach hurt. you paint colors into my world, even from miles away. every croissant you mention, every egg you cook, every sketch you send—those are my treasures. and the way your eyes light up for tulips… that's why I'll always have a garden waiting for you. you are so patient, so kind, and you make my heart feel like it finally found home. i can't wait to hold your hand, to see your smile without a screen. until then, know that i love you more than all the stardust that ever fell.
-            </p>
-        </div>
+    <!-- Counters: days together & months until meeting -->
+    <div class="counters">
+      <div class="counter-box">
+        <div class="counter-label">days of us</div>
+        <div class="counter-number" id="daysTogether">—</div>
+      </div>
+      <div class="counter-box">
+        <div class="counter-label">months until we meet</div>
+        <div class="counter-number" id="monthsUntilMeet">—</div>
+      </div>
     </div>
 
-    <script>
-        (function() {
-            // ----- CUSTOMIZABLE DATA -----
-            const relationshipStart = new Date(2024, 1, 14); // Feb 14, 2024
-            const meetingDate = new Date(2025, 6, 20); // July 20, 2025
+    <!-- Memory Jar + side panel -->
+    <div class="jar-wrapper">
+      <div class="jar-section">
+        <div style="text-align:center; margin-bottom:1rem;">
+          <span style="font-family:'Dancing Script',cursive; font-size:2.3rem;">· our memory jar ·</span>
+        </div>
+        <div class="jar-visual">
+          <div class="glass-jar">
+            <div class="jar-lid"></div>
+            <div class="notes-grid" id="jarNotesContainer"></div>
+          </div>
+          <p style="font-style:italic; color:var(--ink-soft);">click a folded note to read our story</p>
+        </div>
+      </div>
+      <div class="side-panel" id="memoryDetailPanel">
+        <h3>📜 memory unfolds</h3>
+        <p id="memoryDetailText" class="empty-message">tap a small note inside the jar to see the memory here</p>
+      </div>
+    </div>
 
-            const milestones = [
-                { date: "Jan 3, 2024", event: "first message" },
-                { date: "Feb 14, 2024", event: "we became official" },
-                { date: "Apr 22, 2024", event: "first video call" },
-                { date: "Aug 10, 2024", event: "you sent me a painting" },
-                { date: "Dec 1, 2024", event: "stayed up all night" },
-                { date: "Mar 8, 2025", event: "planned our future trip" },
-            ];
+    <!-- Personal note writer -->
+    <div class="write-note-area">
+      <h2>✎ a little something I want you to know</h2>
+      <textarea class="note-input" id="loveNoteInput" placeholder="type here... anything your heart wants to say today..."></textarea>
+      <button class="save-note-btn" id="saveNoteBtn">save this note</button>
+    </div>
 
-            const photos = [
-                { src: "https://placehold.co/300x300/f5e6d3/6b5b4f?text=Us+Smiling", caption: "your smile" },
-                { src: "https://placehold.co/300x300/e8d7b5/4a3c31?text=Sunset+call", caption: "sunset call" },
-                { src: "https://placehold.co/300x300/f0dad5/8b5a4b?text=Your+Art", caption: "your drawing" },
-                { src: "https://placehold.co/300x300/d9c7a3/5c4a3a?text=Croissant+date", caption: "virtual brunch" },
-                { src: "https://placehold.co/300x300/c9b99a/4a3c31?text=Minecraft", caption: "our world" },
-                { src: "https://placehold.co/300x300/f5e6d3/6b5b4f?text=Good+morning", caption: "morning texts" },
-            ];
+    <!-- Polaroids -->
+    <div style="text-align:center; margin:2.5rem 0 1rem;">
+      <span style="font-family:'Dancing Script',cursive; font-size:2.3rem;">· our gallery ·</span>
+    </div>
+    <div class="polaroid-gallery" id="photoGrid"></div>
 
-            const jarMessages = [
-                "the way you say good morning",
-                "your patience with me",
-                "how you love croissants",
-                "your minecraft builds",
-                "the art you make for me",
-                "you love tulips so much",
-                "your voice when you're sleepy",
-                "how you never get mad",
-                "the way you understand me",
-                "our song makes me cry happy",
-                "you are my kind of woman (man)",
-                "your gym dedication",
-                "the cereal debates",
-            ];
+    <!-- Spotify -->
+    <div class="spotify-frame">
+      <iframe src="https://open.spotify.com/embed/playlist/6GsmvGHhNr7EU3wtdKjSR7?utm_source=generator" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
 
-            // populate milestones
-            const mapGrid = document.getElementById('milestoneGrid');
-            milestones.forEach(m => {
-                const div = document.createElement('div');
-                div.className = 'milestone';
-                div.innerHTML = `
-                    <span class="x-mark">✖</span>
-                    <div class="milestone-date">${m.date}</div>
-                    <div class="milestone-desc">${m.event}</div>
-                `;
-                mapGrid.appendChild(div);
-            });
+    <button class="secret-btn" id="secretLetterBtn">✧ open my heart ✧</button>
+    <div class="footer-note">
+      forever yours, through tulips, croissants, and every sunrise.
+    </div>
+  </div>
 
-            // populate photos
-            const photoGrid = document.getElementById('photoGrid');
-            photos.forEach(p => {
-                const polaroid = document.createElement('div');
-                polaroid.className = 'polaroid';
-                polaroid.innerHTML = `
-                    <img src="${p.src}" alt="${p.caption}" onerror="this.src='https://placehold.co/300x300/f5e6d3/4a3c31?text=Photo'">
-                    <div class="caption">${p.caption}</div>
-                `;
-                photoGrid.appendChild(polaroid);
-            });
+  <!-- secret love letter modal -->
+  <div class="modal" id="letterModal">
+    <div class="letter-card">
+      <button class="close-btn" id="closeModalBtn">&times;</button>
+      <h2 style="font-family:'Dancing Script',cursive; font-size:2.8rem;">my dearest,</h2>
+      <p style="font-size:1.3rem; line-height:1.6; margin-top:1rem;">
+        you are my kind of wonderful. every croissant you mention, every tulip you love, every minecraft world we build — they are the little proofs that distance is just a word. you are patient, you are kind, you never make me feel too much. you are the happiest reason I ever lost sleep. I carry your flowers in my wallpaper and your heart in mine, always. can’t wait to finally hold your hand.
+      </p>
+    </div>
+  </div>
 
-            // populate jar
-            const jarNotesContainer = document.getElementById('jarNotes');
-            const jarDisplay = document.getElementById('jarDisplayMessage');
-            jarMessages.forEach((msg, index) => {
-                const note = document.createElement('div');
-                note.className = 'note';
-                note.textContent = `note ${index+1}`;
-                note.addEventListener('click', () => {
-                    jarDisplay.textContent = `“${msg}”`;
-                });
-                jarNotesContainer.appendChild(note);
-            });
+  <script>
+    (() => {
+      // ---------- CUSTOMIZABLE DATA ----------
+      const relationshipStart = new Date(2026, 0, 1); // Jan 1, 2026
+      const meetingDate = new Date(2026, 6, 1); // July 1, 2026 (change if needed)
 
-            // counters
-            function updateCounters() {
-                const now = new Date();
-                const togetherDiff = now - relationshipStart;
-                const daysTogether = Math.floor(togetherDiff / (1000 * 60 * 60 * 24));
-                document.getElementById('daysTogether').textContent = daysTogether;
+      // Milestones for treasure map
+      const milestones = [
+        { date: "Dec 24, 2025", event: "first 'baby'" },
+        { date: "Jan 1, 2026", event: "officially together" },
+        { date: "Jan 5, 2026", event: "first all-nighter call" },
+        { date: "Feb 14, 2026", event: "first Valentine's website" },
+        { date: "Mar 2, 2026", event: "one month gift flowers" },
+        { date: "Apr 10, 2026", event: "100 things we love" },
+        { date: "May 1, 2026", event: "our 4 months comfort" },
+        { date: "Today", event: "still no arguments ❤️" }
+      ];
 
-                const meetDiff = meetingDate - now;
-                if (meetDiff > 0) {
-                    document.getElementById('daysUntilMeet').textContent = Math.ceil(meetDiff / (1000 * 60 * 60 * 24));
-                } else {
-                    document.getElementById('daysUntilMeet').textContent = "0 (we met!)";
-                }
-            }
-            updateCounters();
-            setInterval(updateCounters, 60000);
+      // Photos (replace with your own URLs)
+      const photos = [
+        { src: "https://placehold.co/300x300/f7efe2/5c4a3a?text=Us", caption: "us" },
+        { src: "https://placehold.co/300x300/f2d5d5/4a3c31?text=Your+Art", caption: "your drawing" },
+        { src: "https://placehold.co/300x300/d9c7a3/4a3c31?text=Croissant", caption: "croissant love" },
+        { src: "https://placehold.co/300x300/e8d7b5/3e362e?text=Tulips", caption: "tulips for you" },
+        { src: "https://placehold.co/300x300/f5e6d3/6b5b4f?text=Call", caption: "late night call" },
+        { src: "https://placehold.co/300x300/c9b99a/3e362e?text=Minecraft", caption: "our world" }
+      ];
 
-            // letter modal
-            const modal = document.getElementById('letterModal');
-            document.getElementById('openLetterBtn').addEventListener('click', () => modal.style.display = 'flex');
-            document.getElementById('closeLetter').addEventListener('click', () => modal.style.display = 'none');
-            modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+      // Memory jar entries (the detailed stories)
+      const memoryNotes = [
+        {
+          title: "first night awake",
+          story: "The night we met I was so full of joy that I stayed up with you. I always protect my sleep, but with you it felt like the most natural thing. That night changed everything — it was the first time I chose love over rest, and I'd do it again a thousand times."
+        },
+        {
+          title: "calling you baby",
+          story: "December 24th afternoon. I asked what your ex called you, just to find a way to ask what I could call you. You didn’t have a special name, so I chose 'baby'. The simplest word, but it held all the affection I already felt. That was the day I knew my heart was yours."
+        },
+        {
+          title: "100 things",
+          story: "When we wrote each other 100 things we love about each other, I felt seen in a way I never had before. Nobody ever listed reasons to love me. You made me believe I was worth every word. I still cry happy tears thinking about it."
+        },
+        {
+          title: "new year's paragraphs",
+          story: "Writing New Year's paragraphs to each other made me realize love isn't about labels — it's about showing up. When you told me you were writing one too, my heart stopped. I was always the only one writing before you. That was the moment I understood I had found someone real."
+        },
+        {
+          title: "you asked me to be yours",
+          story: "New Year's Day. A message so long it took 9 minutes to read. At the end, you asked me to make you the happiest man. You also drew my favorite flowers in my favorite color, even though I mentioned them once. I set them as my wallpaper and they've been there ever since. They remind me every day that someone truly loves me."
+        },
+        {
+          title: "my first website for you",
+          story: "I started designing a website for our one month, then it grew into Valentine's. I couldn't hide how much I felt. The song Mrs. Magic played in my head the whole time. Creating something for you felt like the purest form of love, and you received it with so much happiness."
+        },
+        {
+          title: "one month gift flowers",
+          story: "You handed me flowers for our one month — drawn with so much care. I bawled my eyes out. It wasn't just a gift, it was proof that you listen to the smallest details. I wish I could have hugged you right then."
+        },
+        {
+          title: "valentine's website & tears",
+          story: "My Valentine's website held a paragraph so long it took 30 minutes to read. You cried reading my words. A man being that vulnerable with me showed me how safe our love is. That moment is etched in my heart forever."
+        },
+        {
+          title: "the chemicals morning",
+          story: "March morning, you woke up and texted me 'full of chemicals'. I panicked, thinking you inhaled something. You were just half-asleep and silly. It still makes me laugh so much — our weird little moment that only we understand."
+        },
+        {
+          title: "18 hours apart",
+          story: "When my phone got water damage, we couldn't talk for 18 hours. It was the hardest day. You didn't eat or sleep well, and I felt incomplete. That distance taught me how deeply we need each other. I never want to go that long again."
+        },
+        {
+          title: "four months comfort",
+          story: "I couldn't make you anything for our 4 months because of exams. Instead of being upset, you comforted ME. You told me to focus on my future. That's when I knew I chose the right person. You always put my growth first."
+        },
+        {
+          title: "three emotional days",
+          story: "For three days in a row I was super emotional, and you never once made me feel like a burden. You held space for my tears, even from miles away. You are the safest place I've ever known."
+        }
+      ];
 
-            // tulip field interaction: change message on click
-            const tulipField = document.getElementById('tulipField');
-            const tulipMsg = document.getElementById('tulipMessage');
-            const sweetTulipLines = [
-                "he loves tulips, so I planted a field for him",
-                "every tulip is a kiss I'm saving for you",
-                "tulips remind me of your gentle heart",
-                "in another life, we're tulips in the same garden",
-                "blooming for you, always"
-            ];
-            tulipField.addEventListener('click', () => {
-                const random = sweetTulipLines[Math.floor(Math.random() * sweetTulipLines.length)];
-                tulipMsg.textContent = random;
-                tulipMsg.style.color = '#b45f5f';
-                setTimeout(() => { tulipMsg.style.color = 'var(--ink-soft)'; }, 1500);
-            });
+      // ---------- BUILD MAP ----------
+      const mapGrid = document.getElementById('milestoneGrid');
+      milestones.forEach(m => {
+        const div = document.createElement('div');
+        div.className = 'milestone';
+        div.innerHTML = `<span class="x-mark">✖</span><div class="milestone-date">${m.date}</div><div class="milestone-desc">${m.event}</div>`;
+        mapGrid.appendChild(div);
+      });
 
-            // double-click heart animation
-            document.body.addEventListener('dblclick', function(e) {
-                const heart = document.createElement('div');
-                heart.textContent = '♡';
-                heart.style.position = 'fixed';
-                heart.style.left = e.clientX + 'px';
-                heart.style.top = e.clientY + 'px';
-                heart.style.fontSize = '2rem';
-                heart.style.color = '#c9a0a0';
-                heart.style.pointerEvents = 'none';
-                heart.style.zIndex = '999';
-                heart.style.animation = 'fadeUpHeart 1s forwards';
-                document.body.appendChild(heart);
-                setTimeout(() => heart.remove(), 1000);
-            });
+      // ---------- BUILD PHOTOS ----------
+      const photoGrid = document.getElementById('photoGrid');
+      photos.forEach(p => {
+        const pol = document.createElement('div');
+        pol.className = 'polaroid';
+        pol.innerHTML = `<img src="${p.src}" alt="${p.caption}" onerror="this.src='https://placehold.co/300x300/f5e6d3/3e362e?text=Photo'"><div style="font-family:'Dancing Script',cursive; text-align:center; margin-top:0.4rem;">${p.caption}</div>`;
+        photoGrid.appendChild(pol);
+      });
 
-            const styleSheet = document.createElement("style");
-            styleSheet.textContent = `
-                @keyframes fadeUpHeart {
-                    0% { opacity: 1; transform: translateY(0) scale(1); }
-                    100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
-                }
-            `;
-            document.head.appendChild(styleSheet);
-        })();
-    </script>
+      // ---------- BUILD MEMORY JAR ----------
+      const jarContainer = document.getElementById('jarNotesContainer');
+      const detailText = document.getElementById('memoryDetailText');
+      memoryNotes.forEach((mem, idx) => {
+        const note = document.createElement('div');
+        note.className = 'note';
+        note.textContent = `mem ${idx+1}`;
+        note.addEventListener('click', () => {
+          detailText.textContent = mem.story;
+          detailText.classList.remove('empty-message');
+        });
+        jarContainer.appendChild(note);
+      });
+
+      // ---------- COUNTERS ----------
+      function updateCounters() {
+        const now = new Date();
+        const diffDays = Math.floor((now - relationshipStart) / (1000 * 60 * 60 * 24));
+        document.getElementById('daysTogether').textContent = diffDays;
+
+        const monthsUntil = (meetingDate.getFullYear() - now.getFullYear()) * 12 + (meetingDate.getMonth() - now.getMonth());
+        const displayMonths = monthsUntil > 0 ? monthsUntil : 0;
+        document.getElementById('monthsUntilMeet').textContent = displayMonths;
+      }
+      updateCounters();
+      setInterval(updateCounters, 60000);
+
+      // ---------- PERSONAL NOTE (localStorage) ----------
+      const noteInput = document.getElementById('loveNoteInput');
+      const saveBtn = document.getElementById('saveNoteBtn');
+      const savedNote = localStorage.getItem('ourLoveNote');
+      if (savedNote) noteInput.value = savedNote;
+      saveBtn.addEventListener('click', () => {
+        localStorage.setItem('ourLoveNote', noteInput.value);
+        alert('note saved in our little corner 🤍');
+      });
+
+      // ---------- SECRET LETTER MODAL ----------
+      const modal = document.getElementById('letterModal');
+      document.getElementById('secretLetterBtn').addEventListener('click', () => modal.style.display = 'flex');
+      document.getElementById('closeModalBtn').addEventListener('click', () => modal.style.display = 'none');
+      modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+      // tulip message changer
+      const tulipMsg = document.querySelector('.compass');
+      const sweetMessages = [
+        "❦ wherever we go, my heart points to you ❦",
+        "🌷 you are my favorite kind of flower",
+        "tulips bloom every time I think of you",
+        "our love grows even across miles"
+      ];
+      document.querySelector('.tulip-map-decor').addEventListener('click', () => {
+        tulipMsg.textContent = sweetMessages[Math.floor(Math.random() * sweetMessages.length)];
+      });
+
+      // double-click heart floating
+      document.body.addEventListener('dblclick', function(e) {
+        const h = document.createElement('div');
+        h.textContent = '♡';
+        h.style.position = 'fixed';
+        h.style.left = e.clientX + 'px';
+        h.style.top = e.clientY + 'px';
+        h.style.fontSize = '2rem';
+        h.style.color = '#cb9a9a';
+        h.style.pointerEvents = 'none';
+        h.style.zIndex = '300';
+        h.style.animation = 'floatHeart 1s forwards';
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 1000);
+      });
+      const style = document.createElement('style');
+      style.textContent = '@keyframes floatHeart{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.6)}}';
+      document.head.appendChild(style);
+    })();
+  </script>
 </body>
 </html>
+```
